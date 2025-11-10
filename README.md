@@ -6,8 +6,41 @@
 Este projeto é um **Sistema de Cadastro Acadêmico** desenvolvido em **Java**, seguindo a arquitetura **Model-View-Controller (MVC)**.  
 O objetivo é permitir o **gerenciamento de estudantes, cursos, disciplinas e matrículas** através de uma interface gráfica construída com **JavaFX**.  
 
-O backend é responsável pela persistência de dados utilizando **JPA** (Java Persistence API) ou **JDBC**, com o banco de dados **PostgreSQL**.  
-Opcionalmente, o sistema pode ser configurado para conectar-se a um banco hospedado na nuvem através do **Railway**, facilitando testes e implantação.
+O backend está **100% implementado e funcional**, utilizando **JPA/Hibernate** para persistência de dados com banco de dados **PostgreSQL**.  
+O sistema pode ser configurado para usar PostgreSQL local ou hospedado na nuvem através do **Railway**.
+
+---
+
+## Status do Projeto
+
+- **Backend**: Completo e funcional
+  - 4 entidades JPA (Aluno, Curso, Disciplina, Matricula)
+  - 5 DAOs com operações CRUD completas
+  - Configuração JPA/Hibernate
+  - Suporte a Railway PostgreSQL e PostgreSQL local
+  
+- **Frontend**: Em desenvolvimento
+  - Controllers JavaFX (pendente)
+  - Views FXML (pendente)
+
+---
+
+## Documentação Disponível
+
+Este projeto inclui documentação completa para facilitar o desenvolvimento e uso:
+
+### Guias de Configuração
+- **[QUICK_START.md](QUICK_START.md)** - Guia rápido para começar em 5 minutos
+- **[RAILWAY_SETUP.md](RAILWAY_SETUP.md)** - Configuração detalhada do Railway PostgreSQL
+- **[CONFIGURAR_RAILWAY.md](CONFIGURAR_RAILWAY.md)** - Passo a passo para configurar credenciais
+
+### Documentação Técnica
+- **[BACKEND_README.md](BACKEND_README.md)** - Documentação completa do backend com exemplos de uso
+- **[IMPLEMENTACAO.md](IMPLEMENTACAO.md)** - Resumo técnico de tudo que foi implementado
+
+### Scripts Utilitários
+- **`testar-conexao.sh`** - Script para testar conexão com Railway
+- **`instalar-postgres-local.sh`** - Script para instalar PostgreSQL local no Fedora
 
 ---
 
@@ -16,40 +49,42 @@ Opcionalmente, o sistema pode ser configurado para conectar-se a um banco hosped
 A organização do código segue o padrão **MVC**, garantindo separação clara entre as camadas de **modelo**, **controle** e **visão**.
 
 ```
-src/
- ├── model/
- │    ├── entities/
- │    │     ├── Aluno.java
- │    │     ├── Curso.java
- │    │     ├── Disciplina.java
- │    │     └── Matricula.java
- │    ├── dao/
- │    │     ├── AlunoDAO.java
- │    │     ├── CursoDAO.java
- │    │     └── ConnectionFactory.java
- │    └── repository/
- │          └── JPAUtil.java
- │
- ├── controller/
- │    ├── AlunoController.java
- │    ├── CursoController.java
- │    └── MatriculaController.java
- │
- ├── view/
- │    ├── main/
- │    │     └── MainApp.java
- │    ├── fxml/
- │    │     ├── aluno.fxml
- │    │     ├── curso.fxml
- │    │     └── matricula.fxml
- │    └── css/
- │          └── style.css
- │
- ├── util/
- │    └── Config.java
- │
- └── resources/
-      └── META-INF/persistence.xml
+SICA/
+├── src/main/java/
+│   ├── model/
+│   │   ├── entities/          # Entidades JPA
+│   │   │   ├── Aluno.java
+│   │   │   ├── Curso.java
+│   │   │   ├── Disciplina.java
+│   │   │   └── Matricula.java
+│   │   └── dao/               # Data Access Objects
+│   │       ├── GenericDAO.java
+│   │       ├── AlunoDAO.java
+│   │       ├── CursoDAO.java
+│   │       ├── DisciplinaDAO.java
+│   │       └── MatriculaDAO.java
+│   ├── controller/            # Controllers JavaFX (em desenvolvimento)
+│   ├── view/                  # Views JavaFX (em desenvolvimento)
+│   ├── util/                  # Classes utilitárias
+│   │   ├── JPAUtil.java       # Gerenciador JPA
+│   │   └── Config.java        # Configurações
+│   └── TestBackend.java       # Classe de teste do backend
+│
+├── src/main/resources/
+│   └── META-INF/
+│       └── persistence.xml    # Configuração JPA
+│
+├── pom.xml                    # Configuração Maven
+├── .gitignore                 # Arquivos ignorados pelo Git
+│
+├── QUICK_START.md             # Guia rápido
+├── RAILWAY_SETUP.md           # Setup Railway
+├── CONFIGURAR_RAILWAY.md      # Configurar credenciais
+├── BACKEND_README.md          # Documentação do backend
+├── IMPLEMENTACAO.md           # Resumo técnico
+│
+├── testar-conexao.sh          # Script teste Railway
+└── instalar-postgres-local.sh # Script instalação PostgreSQL
 ```
 
 ---
@@ -121,70 +156,252 @@ Essa separação permite que a interface (View) mude sem alterar a lógica de ne
 
 ---
 
+## Inicio Rápido
+
+### Opção 1: PostgreSQL Local (Recomendado para Testes)
+
+Execute o script de instalação:
+
+```bash
+./instalar-postgres-local.sh
+```
+
+Teste o backend:
+
+```bash
+mvn compile exec:java -Dexec.mainClass="TestBackend"
+```
+
+### Opção 2: Railway PostgreSQL (Recomendado para Produção)
+
+1. Crie um banco PostgreSQL no [Railway.app](https://railway.app)
+2. Copie as credenciais (host público, usuário, senha)
+3. Crie o arquivo `src/main/resources/application.properties`:
+
+```properties
+DB_URL=jdbc:postgresql://SEU_HOST_PUBLICO:5432/railway
+DB_USER=postgres
+DB_PASSWORD=SUA_SENHA
+```
+
+4. Teste o backend:
+
+```bash
+mvn compile exec:java -Dexec.mainClass="TestBackend"
+```
+
+Para mais detalhes, consulte:
+- **[QUICK_START.md](QUICK_START.md)** - Guia completo de 5 minutos
+- **[RAILWAY_SETUP.md](RAILWAY_SETUP.md)** - Configuração detalhada do Railway
+- **[CONFIGURAR_RAILWAY.md](CONFIGURAR_RAILWAY.md)** - Solução de problemas
+
+---
+
 ## Configuração do Banco de Dados
 
-### Ambiente Local
-1. Instale o **PostgreSQL** e crie um novo banco de dados:
-   ```sql
-   CREATE DATABASE sistema_academico;
-   ```
-2. Atualize a configuração de conexão em `src/util/Config.java` ou no arquivo `persistence.xml`:
-   ```xml
-   <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/sistema_academico"/>
-   <property name="javax.persistence.jdbc.user" value="postgres"/>
-   <property name="javax.persistence.jdbc.password" value="sua_senha"/>
-   ```
+O sistema suporta duas formas de configuração:
 
-### Railway (opcional)
-1. Crie um projeto no [Railway.app](https://railway.app).  
-2. Adicione o serviço PostgreSQL.  
-3. Copie a URL de conexão e credenciais.  
-4. Substitua os valores no arquivo de configuração.
+### 1. Arquivo application.properties (Recomendado)
+
+Crie `src/main/resources/application.properties`:
+
+```properties
+DB_URL=jdbc:postgresql://localhost:5432/sistema_academico
+DB_USER=postgres
+DB_PASSWORD=postgres
+```
+
+### 2. Variáveis de Ambiente
+
+```bash
+export DB_URL="jdbc:postgresql://localhost:5432/sistema_academico"
+export DB_USER="postgres"
+export DB_PASSWORD="postgres"
+```
+
+O sistema prioriza variáveis de ambiente sobre o arquivo properties.
+
+**Nota**: O arquivo `application.properties` está no `.gitignore` para proteger suas credenciais.
 
 ---
 
 ## Execução do Projeto
 
-### Através de IDE (IntelliJ / Eclipse)
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/sistema-cadastro-academico.git
-   ```
-2. Abra o projeto na sua IDE.  
-3. Execute o build via Maven para instalar dependências.  
-4. Inicie a aplicação executando a classe principal:
-   ```
-   src/view/main/MainApp.java
-   ```
+### 1. Instalar Dependências
 
-### Através do terminal
 ```bash
-mvn clean javafx:run
+mvn clean install
 ```
+
+### 2. Testar o Backend
+
+```bash
+mvn compile exec:java -Dexec.mainClass="TestBackend"
+```
+
+Se tudo estiver correto, você verá:
+
+```
+EntityManagerFactory criado com sucesso!
+Conexao JPA estabelecida com sucesso!
+TODOS OS TESTES PASSARAM COM SUCESSO!
+```
+
+### 3. Executar via IDE (IntelliJ / Eclipse)
+
+1. Clone o repositório
+2. Abra o projeto na IDE
+3. Execute `mvn clean install`
+4. Execute a classe `TestBackend.java` para testar o backend
+5. (Futuro) Execute `MainApp.java` para iniciar a interface gráfica
+
+### 4. Comandos Úteis
+
+```bash
+# Compilar o projeto
+mvn clean compile
+
+# Executar testes do backend
+mvn exec:java -Dexec.mainClass="TestBackend"
+
+# Limpar build anterior
+mvn clean
+
+# Ver dependências
+mvn dependency:tree
+```
+
+---
+
+## Usando os DAOs
+
+O backend está pronto para uso. Exemplo de como usar os DAOs:
+
+```java
+import model.dao.AlunoDAO;
+import model.entities.Aluno;
+import util.JPAUtil;
+
+public class ExemploUso {
+    public static void main(String[] args) {
+        // Criar DAO
+        AlunoDAO alunoDAO = new AlunoDAO();
+        
+        // Criar e salvar aluno
+        Aluno aluno = new Aluno("Maria Santos", "2024001", "maria@email.com");
+        aluno = alunoDAO.save(aluno);
+        
+        // Buscar todos os alunos
+        alunoDAO.findAll().forEach(System.out::println);
+        
+        // Buscar por matrícula
+        Aluno encontrado = alunoDAO.findByMatricula("2024001");
+        
+        // Atualizar
+        encontrado.setTelefone("11988888888");
+        alunoDAO.update(encontrado);
+        
+        // Deletar
+        alunoDAO.delete(encontrado.getId());
+        
+        // Fechar recursos
+        JPAUtil.close();
+    }
+}
+```
+
+Para mais exemplos, consulte **[BACKEND_README.md](BACKEND_README.md)**.
 
 ---
 
 ## Objetivos do Projeto
 
 O sistema foi desenvolvido com fins educacionais, abordando conceitos como:
-- Construção de interfaces com **JavaFX**
-- Manipulação de dados com **JPA/JDBC**
+- Manipulação de dados com **JPA/Hibernate**
 - Aplicação da arquitetura **MVC** em sistemas desktop
-- Integração com banco de dados **PostgreSQL** local e remoto
+- Integração com banco de dados **PostgreSQL** local e remoto (Railway)
 - Separação de camadas e boas práticas de desenvolvimento em Java
+- Padrão DAO (Data Access Object) para acesso a dados
+- Configuração de projetos Maven
+- Gestão de credenciais e segurança
 
 ---
 
-## Melhorias Futuras
+## Roadmap
 
-- Autenticação e controle de usuários (Administrador, Estudante)  
-- Geração de relatórios em PDF ou Excel  
-- Integração com API REST  
-- Testes unitários com JUnit  
-- Suporte a Docker para implantação simplificada  
+### Fase 1 - Backend (Concluído)
+- [x] Entidades JPA (Aluno, Curso, Disciplina, Matricula)
+- [x] DAOs com operações CRUD
+- [x] Configuração JPA/Hibernate
+- [x] Suporte a Railway PostgreSQL
+- [x] Suporte a PostgreSQL local
+- [x] Documentação completa
+
+### Fase 2 - Controllers JavaFX (Próximo)
+- [ ] AlunoController
+- [ ] CursoController
+- [ ] DisciplinaController
+- [ ] MatriculaController
+
+### Fase 3 - Views JavaFX
+- [ ] Telas FXML
+- [ ] Estilização CSS
+- [ ] Validações de formulário
+- [ ] Mensagens de feedback
+
+### Fase 4 - Melhorias
+- [ ] Autenticação e controle de usuários
+- [ ] Geração de relatórios em PDF
+- [ ] Testes unitários com JUnit
+- [ ] Logs de auditoria
+- [ ] Exportação de dados
+
+---
+
+## Contribuindo
+
+Este é um projeto educacional. Contribuições são bem-vindas:
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
+
+---
+
+## Suporte
+
+Para dúvidas e problemas:
+
+1. Consulte a documentação disponível nos arquivos `.md`
+2. Verifique a seção de troubleshooting em **[RAILWAY_SETUP.md](RAILWAY_SETUP.md)**
+3. Execute `TestBackend.java` para verificar se o backend está funcionando
+4. Abra uma issue no repositório
+
+---
+
+## Recursos Adicionais
+
+- [Documentação JPA](https://docs.oracle.com/javaee/7/tutorial/persistence-intro.htm)
+- [Hibernate Guide](https://hibernate.org/orm/documentation/)
+- [JavaFX Documentation](https://openjfx.io/)
+- [Railway Documentation](https://docs.railway.app/)
+- [Maven Guide](https://maven.apache.org/guides/)
 
 ---
 
 ## Licença
 
 Este projeto está licenciado sob a **MIT License** — livre para uso, modificação e distribuição para fins educacionais ou pessoais.
+
+---
+
+## Autores
+
+Desenvolvido como projeto educacional para aprendizado de:
+- Java
+- JPA/Hibernate
+- Arquitetura MVC
+- PostgreSQL
+- Maven
