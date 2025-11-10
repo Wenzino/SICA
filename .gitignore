@@ -1,0 +1,27 @@
+# IDE
+.idea
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+
+# Configurações sensíveis - NÃO COMMITAR!
+.env
+src/main/resources/application.properties
+*.properties
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

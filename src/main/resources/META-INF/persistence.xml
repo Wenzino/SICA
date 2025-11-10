@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="sicaPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <!-- Entidades -->
+        <class>model.entities.Aluno</class>
+        <class>model.entities.Curso</class>
+        <class>model.entities.Disciplina</class>
+        <class>model.entities.Matricula</class>
+        
+        <properties>
+            <!-- Configuração do banco de dados Railway PostgreSQL -->
+            <!-- As credenciais são configuradas via código em JPAUtil.java -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            
+            <!-- Configurações do Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            
+            <!-- Cria/atualiza as tabelas automaticamente -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            
+            <!-- Mostra as queries SQL no console (útil para debug) -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            
+            <!-- Pool de conexões -->
+            <property name="hibernate.connection.pool_size" value="10"/>
+            
+            <!-- Encoding UTF-8 -->
+            <property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
